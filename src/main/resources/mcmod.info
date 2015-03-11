@@ -1,0 +1,16 @@
+[
+{
+  "modid": "ballisticraft",
+  "name": "Ballisticraft",
+  "description": "Modular firearms for Minecraft",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["FruitPhD"], ["Brodt"]
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
