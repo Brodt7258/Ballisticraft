@@ -1,14 +1,25 @@
 [
 {
+<<<<<<< HEAD
   "modid": "examplemod",
   "name": "Example Mod",
   "description": "Example placeholder mod.",
+=======
+  "modid": "ballisticraft",
+  "name": "Ballisticraft",
+  "description": "Modular firearms for Minecraft",
+>>>>>>> 7bc02e9b0477076e78e37d77be80597f2efd48bf
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
+<<<<<<< HEAD
   "authorList": ["ExampleDude"],
   "credits": "The Forge and FML guys, for making this example",
+=======
+  "authorList": ["FruitPhD"], ["Brodt"]
+  "credits": "",
+>>>>>>> 7bc02e9b0477076e78e37d77be80597f2efd48bf
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
