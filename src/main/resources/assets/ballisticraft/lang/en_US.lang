@@ -1,1 +1,7 @@
 item.gunBarrel.name=Gun Barrel
+item.ingotCopper.name=Copper Ingot
+item.ingotTin.name=Tin Ingot
+item.ingotSteel.name=Steel Ingot
+item.ingotBrass.name=Brass Ingot
+
+itemGroup.Ballisticraft=Ballisticraft Items
