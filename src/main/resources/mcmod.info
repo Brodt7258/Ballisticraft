@@ -1,13 +1,13 @@
 [
 {
-  "modid": "ballisticraft",
+  "modid": "mod_Ballisticraft",
   "name": "Ballisticraft",
   "description": "Modular firearms for Minecraft",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": ["FruitPhD"], ["Brodt"]
+  "authorList": ["FruitPhD", "Brodt"],
   "credits": "",
   "logoFile": "",
   "screenshots": [],
