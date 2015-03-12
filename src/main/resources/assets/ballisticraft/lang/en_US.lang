@@ -4,4 +4,6 @@ item.ingotTin.name=Tin Ingot
 item.ingotSteel.name=Steel Ingot
 item.ingotBrass.name=Brass Ingot
 
+tile.alloyFurnace.name=Alloy Furnace
+
 itemGroup.Ballisticraft=Ballisticraft Items
