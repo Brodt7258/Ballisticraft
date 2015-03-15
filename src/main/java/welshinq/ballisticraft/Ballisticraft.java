@@ -1,12 +1,11 @@
 package welshinq.ballisticraft;
 
-import welshinq.ballisticraft.block.BallisticraftAlloyFurnace;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import welshinq.ballisticraft.alloyfurnace.BallisticraftAlloyFurnace;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -14,6 +13,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -31,6 +31,8 @@ public class Ballisticraft
     		serverSide = "welshinq.ballisticraft.CommonProxy")
     public static CommonProxy proxy;
     
+    public static BallisticraftGuiHandler guiHandler = new BallisticraftGuiHandler();
+    
     
     
     /** Item and Block Variables */
@@ -40,7 +42,8 @@ public class Ballisticraft
     public static Item ingotSteel;
     public static Item ingotBrass;
     
-    public static Block alloyFurnace;
+    public static Block alloyFurnace_Idle;
+    public static Block alloyFurnace_Active;
     
     public static CreativeTabs tabBallisticraft = new CreativeTabs("Ballisticraft") {
 	    @Override
@@ -60,14 +63,14 @@ public class Ballisticraft
     	ingotSteel = new BallisticraftItem(64, CreativeTabs.tabMaterials, "ingotSteel", "ingotSteel");
     	ingotBrass = new BallisticraftItem(64, CreativeTabs.tabMaterials, "ingotBrass", "ingotBrass");
     	
-    	alloyFurnace = new BallisticraftAlloyFurnace(Material.rock, this.tabBallisticraft, "alloyFurnace", "alloyFurnace");
-    	
+    	alloyFurnace_Idle = new BallisticraftAlloyFurnace(false).setBlockName("alloyFurnace_Idle").setCreativeTab(this.tabBallisticraft).setBlockTextureName(this.MODID + ":alloyFurnace_Idle");
+    	alloyFurnace_Active = new BallisticraftAlloyFurnace(true).setBlockName("alloyFurnace_Active").setBlockTextureName(this.MODID + ":alloyFurnace_Active");
     	
     	
     	/** Register game objects */
-    	GameRegistry.addSmelting(new ItemStack(Items.iron_ingot, 4), new ItemStack(ingotSteel, 1), 0.1f);
+    	guiHandler.registerTileEntities();
     	
-    	GameRegistry.registerTileEntity(welshinq.ballisticraft.block.TileEntityAlloyFurnace.class, "tileEntityAlloyFurnace");
+    	GameRegistry.addSmelting(new ItemStack(Items.iron_ingot, 4), new ItemStack(ingotSteel, 1), 0.1f);
     	
 		GameRegistry.registerItem(gunBarrel, "gunBarrel");
 		GameRegistry.registerItem(ingotCopper, "ingotCopper");
@@ -75,13 +78,17 @@ public class Ballisticraft
 		GameRegistry.registerItem(ingotSteel, "ingotSteel");
 		GameRegistry.registerItem(ingotBrass, "ingotBrass");
 		
-		GameRegistry.registerBlock(alloyFurnace, "alloyFurnace");
+		GameRegistry.registerBlock(alloyFurnace_Idle, "alloyFurnace_Idle");
+		GameRegistry.registerBlock(alloyFurnace_Active, "alloyFurnace_Active");
+		
+		/** "This" is an instance of @Mod */
+		NetworkRegistry.INSTANCE.registerGuiHandler(this, guiHandler);
     }
     
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-    	
+    	guiHandler.registerRenderers();
     }
     
     @EventHandler
