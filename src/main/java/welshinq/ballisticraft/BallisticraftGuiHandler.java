@@ -11,7 +11,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BallisticraftGuiHandler implements IGuiHandler {
 	
-	public void registerRenderers() {
+	public BallisticraftGuiHandler() {
 		
 	}
 	

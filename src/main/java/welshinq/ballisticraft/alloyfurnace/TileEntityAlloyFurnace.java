@@ -25,7 +25,7 @@ public class TileEntityAlloyFurnace extends TileEntity implements ISidedInventor
 	private static final int[] slotsBottom = new int[] {2, 1};
     private static final int[] slotsSides = new int[] {1};
     /** ItemStack that holds items being used */
-    private ItemStack[] furnaceItemStacks;
+    private ItemStack[] furnaceItemStacks = new ItemStack[3];
     /** Ticks furnace will keep burning */
     public int furnaceBurnTime;
     /** Ticks worth of burn time that a fuel has */
@@ -36,7 +36,7 @@ public class TileEntityAlloyFurnace extends TileEntity implements ISidedInventor
     private String furnaceName = "Alloy Furnace";
     
     public TileEntityAlloyFurnace() {
-    	this.furnaceItemStacks = new ItemStack[5];
+    	
     }
     
 	public void setFurnaceName(String name) {
@@ -100,18 +100,20 @@ public class TileEntityAlloyFurnace extends TileEntity implements ISidedInventor
 	
 	private boolean canSmelt()
     {
-        if (this.furnaceItemStacks[0] == null)
+        if (this.furnaceItemStacks[0] == null && this.furnaceItemStacks[1] == null && this.furnaceItemStacks[2] == null)
         {
             return false;
         }
         else
         {
-            ItemStack itemstack = FurnaceRecipes.smelting().getSmeltingResult(this.furnaceItemStacks[0]);
+            /** ItemStack itemstack = FurnaceRecipes.smelting().getSmeltingResult(this.furnaceItemStacks[0]);
             if (itemstack == null) return false;
             if (this.furnaceItemStacks[2] == null) return true;
             if (!this.furnaceItemStacks[2].isItemEqual(itemstack)) return false;
             int result = this.furnaceItemStacks[2].stackSize + itemstack.stackSize;
             return result <= getInventoryStackLimit() && result <= this.furnaceItemStacks[2].getMaxStackSize(); //Forge BugFix: Make it respect stack sizes properly.
+            */
+        	return false;
         }
     }
 	
@@ -160,11 +162,11 @@ public class TileEntityAlloyFurnace extends TileEntity implements ISidedInventor
 				
 				if (furnaceBurnTime > 0) {
 					flag1 = true;
-					if (this.furnaceItemStacks[1] != null) {
-						this.furnaceItemStacks[1].stackSize--;
+					if (this.furnaceItemStacks[5] != null) {
+						this.furnaceItemStacks[5].stackSize--;
 						
-						if (this.furnaceItemStacks[1].stackSize == 0) {
-							this.furnaceItemStacks[1] = this.furnaceItemStacks[1].getItem().getContainerItem(this.furnaceItemStacks[1]);
+						if (this.furnaceItemStacks[5].stackSize == 0) {
+							this.furnaceItemStacks[5] = this.furnaceItemStacks[5].getItem().getContainerItem(this.furnaceItemStacks[5]);
 						}
 					}
 				}
@@ -214,11 +216,12 @@ public class TileEntityAlloyFurnace extends TileEntity implements ISidedInventor
 	
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		ItemStack stack = null;
-		if (slot < this.furnaceItemStacks.length) {
+		/**ItemStack stack = null;
+		if (slot <= this.furnaceItemStacks.length) {
 			stack = this.furnaceItemStacks[slot];
 		}
-		return stack;
+		return stack;*/
+		return this.furnaceItemStacks[slot];
 	}
 	
 	@Override
@@ -248,6 +251,7 @@ public class TileEntityAlloyFurnace extends TileEntity implements ISidedInventor
 	
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
+		this.furnaceItemStacks[slot] = stack;
 		if (stack != null && isItemValidForSlot(slot, stack)) {
 			if (stack.stackSize > getInventoryStackLimit()) {
 				stack.stackSize = getInventoryStackLimit();
@@ -285,7 +289,7 @@ public class TileEntityAlloyFurnace extends TileEntity implements ISidedInventor
 	
 	@Override
 	public boolean isItemValidForSlot(int slots, ItemStack stack) {
-		return slots == 2 ? false : (slots == 1 ? isItemFuel(stack) : true);
+		return (slots == 3 || slots == 4) ? false : (slots == 5 ? isItemFuel(stack) : true);
 	}
 	
 	@Override
@@ -300,7 +304,7 @@ public class TileEntityAlloyFurnace extends TileEntity implements ISidedInventor
 	
 	@Override
 	public boolean canExtractItem(int slot, ItemStack stack, int side) {
-		return side != 0 || slot != 1 || stack.getItem() == Items.bucket;
+		return side != 0 || slot != 5 || stack.getItem() == Items.bucket;
 	}
 	
 	//TODO UNDERSTAND THE NBT CODE HERE V
@@ -308,7 +312,7 @@ public class TileEntityAlloyFurnace extends TileEntity implements ISidedInventor
 		super.readFromNBT(tagCompound);
 		
 		NBTTagList tagList = tagCompound.getTagList("Items", 10);
-		this.furnaceItemStacks = new ItemStack[getSizeInventory()];
+		this.furnaceItemStacks = new ItemStack[this.getSizeInventory()];
 		
 		for (int i = 0; i < tagList.tagCount(); i++) {
 			NBTTagCompound tagCompound1 = tagList.getCompoundTagAt(i);
