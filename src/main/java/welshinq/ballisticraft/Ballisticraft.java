@@ -88,7 +88,7 @@ public class Ballisticraft
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-    	guiHandler.registerRenderers();
+    	
     }
     
     @EventHandler

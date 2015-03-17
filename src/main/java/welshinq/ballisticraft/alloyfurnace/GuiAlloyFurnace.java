@@ -13,9 +13,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiAlloyFurnace extends GuiContainer
 {
-    private static final ResourceLocation furnaceGuiTextures = new ResourceLocation("textures/gui/container/furnace.png");
+    private static final ResourceLocation furnaceGuiTextures = new ResourceLocation("ballisticraft:textures/gui/alloyFurnaceGui.png");
     private TileEntityAlloyFurnace tileFurnace;
-    private static final String __OBFID = "CL_00000758";
 
     public GuiAlloyFurnace(InventoryPlayer invPlayer, TileEntityAlloyFurnace tileEntityFurnace)
     {

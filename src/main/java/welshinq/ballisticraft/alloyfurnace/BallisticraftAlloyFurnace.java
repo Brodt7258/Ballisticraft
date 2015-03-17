@@ -28,6 +28,7 @@ public class BallisticraftAlloyFurnace extends BlockContainer {
 	private IIcon front;
 	private static boolean isBurning;
 	private final boolean isBurning1;
+	private final Random random = new Random();
 	
 	public BallisticraftAlloyFurnace(boolean isActive) {
 		super(Material.iron);
@@ -38,17 +39,28 @@ public class BallisticraftAlloyFurnace extends BlockContainer {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegistry) {
-		this.blockIcon = iconRegistry.registerIcon(Ballisticraft.MODID + ":alloyfurnace_side");
-		this.front = iconRegistry.registerIcon(this.isBurning ? Ballisticraft.MODID + ":alloyfurnace_on" :
-			Ballisticraft.MODID + ":alloyfurnace_off");
-		this.top = iconRegistry.registerIcon(Ballisticraft.MODID + ":alloyfurnace_top");
+	public void registerBlockIcons(IIconRegister iconRegistry) {
+		this.blockIcon = iconRegistry.registerIcon(Ballisticraft.MODID + ":alloyFurnace_Side");
+		this.front = iconRegistry.registerIcon(this.isBurning1 ? Ballisticraft.MODID + ":alloyFurnace_Active" :
+			Ballisticraft.MODID + ":alloyFurnace_Idle");
+		this.top = iconRegistry.registerIcon(Ballisticraft.MODID + ":alloyFurnace_Top");
 	}
 	
 	@SideOnly(Side.CLIENT)
 	public void onBlockAdded(World world, int x, int y, int z) {
 		super.onBlockAdded(world, x, y, z);
 		this.direction(world, x, y, z);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int meta) {
+		if (side == 1) {
+			return top;
+		} else if (side == 3) {
+			return front;
+		} else {
+			return this.blockIcon;
+		}
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -107,16 +119,6 @@ public class BallisticraftAlloyFurnace extends BlockContainer {
 		}
 	}
 	
-	public IIcon getIcon(int side, int meta) {
-		if (side == 1) {
-			return top;
-		} else if (side == 3) {
-			return front;
-		} else {
-			return this.blockIcon;
-		}
-	}
-	
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
 		int direction = MathHelper.floor_double((double) (entity.rotationYaw * 4.0f / 360.0f) + 0.5d) & 3;
 		
@@ -129,7 +131,7 @@ public class BallisticraftAlloyFurnace extends BlockContainer {
 			((TileEntityAlloyFurnace) world.getTileEntity(x, y, z)).setFurnaceName(stack.getDisplayName());
 		}
 	}
-	//TODO Get GUI working
+	
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player,
 			int metadata, float par1, float par2, float par3) {
 		TileEntityAlloyFurnace tileEntityFurnace = (TileEntityAlloyFurnace) world.getTileEntity(x, y, z);
@@ -139,11 +141,9 @@ public class BallisticraftAlloyFurnace extends BlockContainer {
 		}
 		
 		if (world.isRemote) {
-			System.out.println("Furnace Activated Client");
 			player.openGui(Ballisticraft.instance, 0, world, x, y, z);
 			return true;
 		} else {
-			System.out.println("Furnace Activated Server");
 			return true;
 		}
 	}
