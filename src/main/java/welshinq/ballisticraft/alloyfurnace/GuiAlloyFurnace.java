@@ -45,9 +45,9 @@ public class GuiAlloyFurnace extends GuiContainer
         if (this.tileFurnace.isBurning())
         {
             int i1 = this.tileFurnace.getBurnTimeRemainingScaled(13);
-            this.drawTexturedModalRect(k + 56, l + 36 + 12 - i1, 176, 12 - i1, 14, i1 + 1);
-            i1 = this.tileFurnace.getCookProgressScaled(24);
-            this.drawTexturedModalRect(k + 79, l + 34, 176, 14, i1 + 1, 16);
+            this.drawTexturedModalRect(k + 75, l + 54 + 12 - i1, 176, 12 - i1, 14, i1 + 1);
+            i1 = this.tileFurnace.getCookProgressScaled(60);
+            this.drawTexturedModalRect(k + 43, l + 34, 176, 14, i1 + 1, 16);
         }
     }
 }

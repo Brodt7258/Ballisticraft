@@ -21,10 +21,7 @@ public class ContainerAlloyFurnace extends Container {
     public ContainerAlloyFurnace(InventoryPlayer invPlayer, TileEntityAlloyFurnace alloyFurnace) {
         this.tileFurnace = alloyFurnace;
         
-        //addGuiSlots(alloyFurnace, invPlayer);
-        this.addSlotToContainer(new Slot(alloyFurnace, 0, 56, 17));
-		this.addSlotToContainer(new Slot(alloyFurnace, 1, 56, 53));
-		this.addSlotToContainer(new SlotFurnace(invPlayer.player, alloyFurnace, 2, 116, 35));
+        addGuiSlots(alloyFurnace, invPlayer);
 
         bindPlayerInventory(invPlayer);
     }
@@ -64,7 +61,6 @@ public class ContainerAlloyFurnace extends Container {
     //TODO
     public void addCraftingToCrafters(ICrafting icrafting)
     {
-    	System.out.println("Method called!");
         super.addCraftingToCrafters(icrafting);
         icrafting.sendProgressBarUpdate(this, 0, this.tileFurnace.furnaceCookTime);
         icrafting.sendProgressBarUpdate(this, 1, this.tileFurnace.furnaceBurnTime);
@@ -77,7 +73,6 @@ public class ContainerAlloyFurnace extends Container {
     public void detectAndSendChanges()
     {
         super.detectAndSendChanges();
-        System.out.println("Method called!");
 
         for (int i = 0; i < this.crafters.size(); i++)
         {
@@ -124,7 +119,6 @@ public class ContainerAlloyFurnace extends Container {
     }
     
 	public boolean canInteractWith(EntityPlayer player) {
-		System.out.println("Method called!");
 		return this.tileFurnace.isUseableByPlayer(player);
 	}
 
@@ -141,9 +135,9 @@ public class ContainerAlloyFurnace extends Container {
             ItemStack itemstack1 = slotObj.getStack();
             itemstack = itemstack1.copy();
 
-            if (slot == 2)
+            if (slot == 4 || slot == 5)
             {
-                if (!this.mergeItemStack(itemstack1, 3, 39, true))
+                if (!this.mergeItemStack(itemstack1, 6, 42, true))
                 {
                     return null;
                 }
@@ -152,23 +146,16 @@ public class ContainerAlloyFurnace extends Container {
             }
             else if (slot != 1 && slot != 0)
             {
-                if (FurnaceRecipes.smelting().getSmeltingResult(itemstack1) != null)
+                if (TileEntityFurnace.isItemFuel(itemstack1))
                 {
-                    if (!this.mergeItemStack(itemstack1, 0, 1, false))
-                    {
-                        return null;
-                    }
-                }
-                else if (TileEntityFurnace.isItemFuel(itemstack1))
-                {
-                    if (!this.mergeItemStack(itemstack1, 1, 2, false))
+                    if (!this.mergeItemStack(itemstack1, 5, 6, false))
                     {
                         return null;
                     }
                 }
                 else if (slot >= 3 && slot < 30)
                 {
-                    if (!this.mergeItemStack(itemstack1, 30, 39, false))
+                    if (!this.mergeItemStack(itemstack1, 33, 42, false))
                     {
                         return null;
                     }
@@ -178,7 +165,7 @@ public class ContainerAlloyFurnace extends Container {
                     return null;
                 }
             }
-            else if (!this.mergeItemStack(itemstack1, 3, 39, false))
+            else if (!this.mergeItemStack(itemstack1, 6, 42, false))
             {
                 return null;
             }

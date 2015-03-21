@@ -17,7 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import welshinq.ballisticraft.Ballisticraft;
+import welshinq.ballisticraft.BallisticraftMain;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 //TODO Annotate and clean up the code
@@ -26,6 +26,7 @@ public class BallisticraftAlloyFurnace extends BlockContainer {
 	private IIcon top;
 	@SideOnly(Side.CLIENT)
 	private IIcon front;
+	
 	private static boolean isBurning;
 	private final boolean isBurning1;
 	private final Random random = new Random();
@@ -39,11 +40,11 @@ public class BallisticraftAlloyFurnace extends BlockContainer {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister iconRegistry) {
-		this.blockIcon = iconRegistry.registerIcon(Ballisticraft.MODID + ":alloyFurnace_Side");
-		this.front = iconRegistry.registerIcon(this.isBurning1 ? Ballisticraft.MODID + ":alloyFurnace_Active" :
-			Ballisticraft.MODID + ":alloyFurnace_Idle");
-		this.top = iconRegistry.registerIcon(Ballisticraft.MODID + ":alloyFurnace_Top");
+	public void registerBlockIcons(IIconRegister iconRegister) {
+		this.blockIcon = iconRegister.registerIcon(BallisticraftMain.MODID + ":alloyFurnace_Side");
+		this.front = iconRegister.registerIcon(this.isBurning1 ? BallisticraftMain.MODID + ":alloyFurnace_Active" :
+			BallisticraftMain.MODID + ":alloyFurnace_Idle");
+		this.top = iconRegister.registerIcon(BallisticraftMain.MODID + ":alloyFurnace_Top");
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -54,13 +55,7 @@ public class BallisticraftAlloyFurnace extends BlockContainer {
 	
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		if (side == 1) {
-			return top;
-		} else if (side == 3) {
-			return front;
-		} else {
-			return this.blockIcon;
-		}
+		return side == 1 ? this.top : (side == 0 ? this.top : (side != meta ? this.blockIcon : this.front));
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -140,20 +135,16 @@ public class BallisticraftAlloyFurnace extends BlockContainer {
 			return false;
 		}
 		
-		if (world.isRemote) {
-			player.openGui(Ballisticraft.instance, 0, world, x, y, z);
-			return true;
-		} else {
-			return true;
-		}
+		player.openGui(BallisticraftMain.instance, 0, world, x, y, z);
+		return true;
 	}
 	
 	public Item getItemDropped(int par1, Random random, int par2) {
-		return Item.getItemFromBlock(Ballisticraft.alloyFurnace_Idle);
+		return Item.getItemFromBlock(BallisticraftMain.alloyFurnace_Idle);
 	}
 	
 	public Item getItem(World world, int x, int y, int z) {
-		return Item.getItemFromBlock(Ballisticraft.alloyFurnace_Idle);
+		return Item.getItemFromBlock(BallisticraftMain.alloyFurnace_Idle);
 	}
 	
 	public static void updateBlockState(boolean burning, World world, int x, int y, int z) {
@@ -162,13 +153,12 @@ public class BallisticraftAlloyFurnace extends BlockContainer {
 		isBurning = true;
 		
 		if (burning) {
-			world.setBlock(x, y, z, Ballisticraft.alloyFurnace_Active);
+			world.setBlock(x, y, z, BallisticraftMain.alloyFurnace_Active);
 		} else {
-			world.setBlock(x,  y,  z, Ballisticraft.alloyFurnace_Idle);
+			world.setBlock(x,  y,  z, BallisticraftMain.alloyFurnace_Idle);
 		}
 		
 		isBurning = false;
-		
 		world.setBlockMetadataWithNotify(x, y, z, direction, 2);
 		
 		if(tileEntity != null) {
@@ -213,7 +203,6 @@ public class BallisticraftAlloyFurnace extends BlockContainer {
 		super.breakBlock(world, x, y, z, block, meta);
 	}
 
-	@Override
 	public TileEntity createNewTileEntity(World world, int par1) {
 		return new TileEntityAlloyFurnace();
 	}

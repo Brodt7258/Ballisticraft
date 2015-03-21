@@ -9,6 +9,6 @@ public class BallisticraftItem extends Item {
 		setMaxStackSize(stackSize);
 		setCreativeTab(tab);
 		setUnlocalizedName(unlocName);
-		setTextureName(Ballisticraft.MODID+":"+texName);
+		setTextureName(BallisticraftMain.MODID+":"+texName);
 	}
 }

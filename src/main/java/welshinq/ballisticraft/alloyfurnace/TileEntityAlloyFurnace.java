@@ -21,11 +21,11 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 // TODO Annotate and clean up the code
 public class TileEntityAlloyFurnace extends TileEntity implements ISidedInventory {
-	private static final int slotsTop[] = new int[] {0};
-	private static final int[] slotsBottom = new int[] {2, 1};
-    private static final int[] slotsSides = new int[] {1};
+	private static final int slotsTop[] = new int[] {0, 1, 2};
+	private static final int[] slotsBottom = new int[] {3, 4};
+    private static final int[] slotsSides = new int[] {5};
     /** ItemStack that holds items being used */
-    private ItemStack[] furnaceItemStacks = new ItemStack[3];
+    private ItemStack[] furnaceItemStacks = new ItemStack[6];
     /** Ticks furnace will keep burning */
     public int furnaceBurnTime;
     /** Ticks worth of burn time that a fuel has */
@@ -106,14 +106,12 @@ public class TileEntityAlloyFurnace extends TileEntity implements ISidedInventor
         }
         else
         {
-            /** ItemStack itemstack = FurnaceRecipes.smelting().getSmeltingResult(this.furnaceItemStacks[0]);
+            ItemStack itemstack = AlloyFurnaceRecipes.isRecipe(this.furnaceItemStacks[0], this.furnaceItemStacks[1], this.furnaceItemStacks[2]);
             if (itemstack == null) return false;
-            if (this.furnaceItemStacks[2] == null) return true;
-            if (!this.furnaceItemStacks[2].isItemEqual(itemstack)) return false;
-            int result = this.furnaceItemStacks[2].stackSize + itemstack.stackSize;
-            return result <= getInventoryStackLimit() && result <= this.furnaceItemStacks[2].getMaxStackSize(); //Forge BugFix: Make it respect stack sizes properly.
-            */
-        	return false;
+            if (this.furnaceItemStacks[3] == null) return true;
+            if (!this.furnaceItemStacks[3].isItemEqual(itemstack)) return false;
+            int result = this.furnaceItemStacks[3].stackSize + itemstack.stackSize;
+            return result <= getInventoryStackLimit() && result <= this.furnaceItemStacks[3].getMaxStackSize(); //Forge BugFix: Make it respect stack sizes properly.
         }
     }
 	
@@ -125,22 +123,38 @@ public class TileEntityAlloyFurnace extends TileEntity implements ISidedInventor
     {
         if (canSmelt())
         {
-            ItemStack itemstack = FurnaceRecipes.smelting().getSmeltingResult(this.furnaceItemStacks[0]);
+            ItemStack itemstack = AlloyFurnaceRecipes.isRecipe(this.furnaceItemStacks[0], this.furnaceItemStacks[1], this.furnaceItemStacks[2]);
 
-            if (this.furnaceItemStacks[2] == null)
+            if (this.furnaceItemStacks[3] == null)
             {
-                this.furnaceItemStacks[2] = itemstack.copy();
+                this.furnaceItemStacks[3] = itemstack.copy();
             }
-            else if (this.furnaceItemStacks[2].getItem() == itemstack.getItem())
+            else if (this.furnaceItemStacks[3].getItem() == itemstack.getItem())
             {
-                this.furnaceItemStacks[2].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
+                this.furnaceItemStacks[3].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
             }
 
-            this.furnaceItemStacks[0].stackSize--;
+            if (this.furnaceItemStacks[0] != null) this.furnaceItemStacks[0].stackSize--;
+            if (this.furnaceItemStacks[1] != null) this.furnaceItemStacks[1].stackSize--;
+            if (this.furnaceItemStacks[2] != null) this.furnaceItemStacks[2].stackSize--; 
 
-            if (this.furnaceItemStacks[0].stackSize <= 0)
-            {
-                this.furnaceItemStacks[0] = null;
+            if (this.furnaceItemStacks[0] != null) {
+	            if (this.furnaceItemStacks[0].stackSize <= 0)
+	            {
+	                this.furnaceItemStacks[0] = null;
+	            }
+            }
+            if (this.furnaceItemStacks[1] != null) {
+	            if (this.furnaceItemStacks[1].stackSize <= 0)
+	            {
+	                this.furnaceItemStacks[1] = null;
+	            }
+            }
+            if (this.furnaceItemStacks[2] != null) {
+	            if (this.furnaceItemStacks[2].stackSize <= 0)
+	            {
+	                this.furnaceItemStacks[2] = null;
+	            }
             }
         }
     }
@@ -158,7 +172,7 @@ public class TileEntityAlloyFurnace extends TileEntity implements ISidedInventor
 		/** If worldObj is server world */
 		if (!worldObj.isRemote) {
 			if (furnaceBurnTime == 0 && canSmelt()) {
-				this.currentBurnTime = furnaceBurnTime = getItemBurnTime(this.furnaceItemStacks[1]);
+				this.currentBurnTime = furnaceBurnTime = getItemBurnTime(this.furnaceItemStacks[5]);
 				
 				if (furnaceBurnTime > 0) {
 					flag1 = true;
@@ -216,12 +230,11 @@ public class TileEntityAlloyFurnace extends TileEntity implements ISidedInventor
 	
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		/**ItemStack stack = null;
-		if (slot <= this.furnaceItemStacks.length) {
+		ItemStack stack = null;
+		if (slot <= this.furnaceItemStacks.length && slot >= 0) {
 			stack = this.furnaceItemStacks[slot];
 		}
-		return stack;*/
-		return this.furnaceItemStacks[slot];
+		return stack;
 	}
 	
 	@Override
