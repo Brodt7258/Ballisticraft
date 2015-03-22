@@ -2,13 +2,12 @@ package welshinq.ballisticraft.alloyfurnace;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import welshinq.ballisticraft.BallisticraftMain;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import welshinq.ballisticraft.BCItem;
 
 public class AlloyFurnaceRecipes {
 	private static final AlloyFurnaceRecipes ALLOYBASE = new AlloyFurnaceRecipes();
@@ -23,7 +22,7 @@ public class AlloyFurnaceRecipes {
 		
 	}
 	
-	/** Adds a recipe to alloyfurnace. 
+	/** Checks a hard-coded recipe to alloyfurnace. 
 	 * Parameters: ItemStack input 1, 2, and 3
 	 */
 	public static ItemStack isRecipe(ItemStack input, ItemStack input1, ItemStack input2) {
@@ -36,10 +35,10 @@ public class AlloyFurnaceRecipes {
 		Item[] in = new Item[] {in1, in2, in3};
 		ItemStack output = null;
 		
-		Item[] brassRecipe = new Item[] {BallisticraftMain.ingotCopper, BallisticraftMain.ingotTin, null};
+		Item[] brassRecipe = new Item[] {BCItem.ingotCopper, BCItem.ingotTin, null};
 		
 		if (in[0] == brassRecipe[0] && in[1] == brassRecipe[1] && in[2] == brassRecipe[2]) {
-			output = new ItemStack(BallisticraftMain.ingotBrass, 2, 32767);
+			output = new ItemStack(BCItem.ingotBrass, 2, 32767);
 		}
 		
 		return output;
@@ -53,8 +52,8 @@ public class AlloyFurnaceRecipes {
 	/** Compares the ItemStack's item to a list of products, returns exp value */
 	public float getAlloyingExperience(ItemStack stack) {
 		if (stack != null) {
-			if (stack.getItem() == BallisticraftMain.ingotBrass) return 0.8f;
-			if (stack.getItem() == BallisticraftMain.ingotSteel) return 0.8f;
+			if (stack.getItem() == BCItem.ingotBrass) return 0.8f;
+			if (stack.getItem() == BCItem.ingotSteel) return 0.8f;
 			return -1.0f;
 		} else return -1.0f;
 	}

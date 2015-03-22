@@ -58,7 +58,6 @@ public class ContainerAlloyFurnace extends Container {
         }
     }
     
-    //TODO
     public void addCraftingToCrafters(ICrafting icrafting)
     {
         super.addCraftingToCrafters(icrafting);
@@ -67,9 +66,7 @@ public class ContainerAlloyFurnace extends Container {
         icrafting.sendProgressBarUpdate(this, 2, this.tileFurnace.currentBurnTime);
     }
 
-    /**
-     * Looks for changes made in the container, sends them to every listener.
-     */
+    /** Looks for changes made in the container, sends them to every listener. */
     public void detectAndSendChanges()
     {
         super.detectAndSendChanges();
@@ -98,7 +95,7 @@ public class ContainerAlloyFurnace extends Container {
         this.lastBurnTime = this.tileFurnace.furnaceBurnTime;
         this.lastItemBurnTime = this.tileFurnace.currentBurnTime;
     }
-// TODO Understand this shit
+    
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int num1, int num2)
     {
@@ -124,7 +121,6 @@ public class ContainerAlloyFurnace extends Container {
 
 	/** MAKE SURE YOU OVERRIDE THIS OR IT WILL CRASH 
 	 * This is the Shift-Click stack transfer method */
-	//TODO
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot)
     {
         ItemStack itemstack = null;
@@ -135,7 +131,7 @@ public class ContainerAlloyFurnace extends Container {
             ItemStack itemstack1 = slotObj.getStack();
             itemstack = itemstack1.copy();
 
-            if (slot == 4 || slot == 5)
+            if (slot == 3 || slot == 4 || slot == 5)
             {
                 if (!this.mergeItemStack(itemstack1, 6, 42, true))
                 {
@@ -144,23 +140,23 @@ public class ContainerAlloyFurnace extends Container {
 
                 slotObj.onSlotChange(itemstack1, itemstack);
             }
-            else if (slot != 1 && slot != 0)
+            else if (slot != 0 && slot != 1 && slot != 2 && slot != 5)
             {
-                if (TileEntityFurnace.isItemFuel(itemstack1))
+                if (TileEntityAlloyFurnace.isItemFuel(itemstack1))
                 {
                     if (!this.mergeItemStack(itemstack1, 5, 6, false))
                     {
                         return null;
                     }
                 }
-                else if (slot >= 3 && slot < 30)
+                else if (slot >= 6 && slot < 33)
                 {
                     if (!this.mergeItemStack(itemstack1, 33, 42, false))
                     {
                         return null;
                     }
                 }
-                else if (slot >= 30 && slot < 39 && !this.mergeItemStack(itemstack1, 3, 30, false))
+                else if (slot >= 33 && slot < 42 && !this.mergeItemStack(itemstack1, 6, 33, false))
                 {
                     return null;
                 }
@@ -172,7 +168,7 @@ public class ContainerAlloyFurnace extends Container {
 
             if (itemstack1.stackSize == 0)
             {
-                slotObj.putStack((ItemStack)null);
+                slotObj.putStack((ItemStack) null);
             }
             else
             {
