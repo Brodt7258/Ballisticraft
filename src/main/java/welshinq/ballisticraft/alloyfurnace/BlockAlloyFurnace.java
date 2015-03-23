@@ -29,21 +29,24 @@ public class BlockAlloyFurnace extends BlockContainer {
 	private IIcon front;
 	
 	private final boolean isBurning;
+	private static boolean isBurning1;
 	private final Random random = new Random();
 	
 	public BlockAlloyFurnace(boolean isActive) {
 		super(Material.iron);
-		setHardness(2.0f);
+		setHardness(3.5f);
 		setResistance(5.0f);
+		setHarvestLevel("pickaxe", 1);
+		setStepSound(Block.soundTypeMetal);
 		isBurning = isActive;
 	}
 	
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		this.blockIcon = iconRegister.registerIcon(MainRegistry.MODID + ":alloyFurnace_Side");
-		this.front = iconRegister.registerIcon(this.isBurning ? MainRegistry.MODID + ":alloyFurnace_Active" :
-			MainRegistry.MODID + ":alloyFurnace_Idle");
-		this.top = iconRegister.registerIcon(MainRegistry.MODID + ":alloyFurnace_Top");
+		this.blockIcon = iconRegister.registerIcon(MainRegistry.MODID + ":alloyFurnaceSide");
+		this.front = iconRegister.registerIcon(this.isBurning ? MainRegistry.MODID + ":alloyFurnaceActive" :
+			MainRegistry.MODID + ":alloyFurnace");
+		this.top = iconRegister.registerIcon(MainRegistry.MODID + ":alloyFurnaceTop");
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -63,18 +66,29 @@ public class BlockAlloyFurnace extends BlockContainer {
 			int direction = world.getBlockMetadata(x, y, z);
 			
 			float xx = (float) x + 0.5f;
-			float xx1 = random.nextFloat() * 0.3f - 0.2f;
 			float yy = (float) y + random.nextFloat() * 6.0f / 16.0f;
 			float zz = (float) z + 0.5f;
-			float zz1 = 0.5f;
+			float xx1 = 0.52f;
+			float zz1 = random.nextFloat() * 0.6f - 0.3f;
 			
-			world.spawnParticle("smoke", (double) (xx - zz1), (double) yy, (double) (zz + xx1), 0.0d, 0.0d, 0.0d);
-			world.spawnParticle("flame", (double) (xx - zz1), (double) yy, (double) (zz + xx1), 0.0d, 0.0d, 0.0d);
+			if (direction == 4) {
+				world.spawnParticle("smoke", (double) (xx - xx1), (double) yy, (double) (zz + zz1), 0.0F, 0.0F, 0.0F);
+				world.spawnParticle("flame", (double) (xx - xx1), (double) yy, (double) (zz + zz1), 0.0F, 0.0F, 0.0F);
+			} else if (direction == 5) {
+				world.spawnParticle("smoke", (double) (xx + xx1), (double) yy, (double) (zz + zz1), 0.0F, 0.0F, 0.0F);
+				world.spawnParticle("flame", (double) (xx + xx1), (double) yy, (double) (zz + zz1), 0.0F, 0.0F, 0.0F);
+			} else if (direction == 2) {
+				world.spawnParticle("smoke", (double) (xx + zz1), (double) yy, (double) (zz - xx1), 0.0F, 0.0F, 0.0F);
+				world.spawnParticle("flame", (double) (xx + zz1), (double) yy, (double) (zz - xx1), 0.0F, 0.0F, 0.0F);
+			} else if (direction == 3) {
+				world.spawnParticle("smoke", (double) (xx + zz1), (double) yy, (double) (zz + xx1), 0.0F, 0.0F, 0.0F);
+				world.spawnParticle("flame", (double) (xx + zz1), (double) yy, (double) (zz + xx1), 0.0F, 0.0F, 0.0F);
+			}
 		}
 	}
 	
 	public TileEntity createNewTileEntity(World world, int par1) {
-		return new TileEntityAlloyFurnace();
+		return new TileAlloyFurnace();
 	}
 	
 	public void direction(World world, int x, int y, int z) {
@@ -114,13 +128,13 @@ public class BlockAlloyFurnace extends BlockContainer {
 		if (direction == 3) world.setBlockMetadataWithNotify(x,  y,  z,  4,  2);
 		
 		if (stack.hasDisplayName()) {
-			((TileEntityAlloyFurnace) world.getTileEntity(x, y, z)).setFurnaceName(stack.getDisplayName());
+			((TileAlloyFurnace) world.getTileEntity(x, y, z)).setFurnaceName(stack.getDisplayName());
 		}
 	}
 	
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player,
 			int metadata, float par1, float par2, float par3) {
-		TileEntityAlloyFurnace tileEntityFurnace = (TileEntityAlloyFurnace) world.getTileEntity(x, y, z);
+		TileAlloyFurnace tileEntityFurnace = (TileAlloyFurnace) world.getTileEntity(x, y, z);
 		
 		if (tileEntityFurnace == null || player.isSneaking()) {
 			return false;
@@ -131,23 +145,25 @@ public class BlockAlloyFurnace extends BlockContainer {
 	}
 	
 	public Item getItemDropped(int par1, Random random, int par2) {
-		return Item.getItemFromBlock(BCBlock.alloyFurnace_Idle);
+		return Item.getItemFromBlock(BCBlock.alloyFurnace);
 	}
 	
 	public Item getItem(World world, int x, int y, int z) {
-		return Item.getItemFromBlock(BCBlock.alloyFurnace_Idle);
+		return Item.getItemFromBlock(BCBlock.alloyFurnace);
 	}
 	
 	public static void updateBlockState(boolean burning, World world, int x, int y, int z) {
 		int direction = world.getBlockMetadata(x, y, z);
 		TileEntity tileEntity = world.getTileEntity(x, y, z);
+		isBurning1 = true;
 		
 		if (burning) {
-			world.setBlock(x, y, z, BCBlock.alloyFurnace_Active);
+			world.setBlock(x, y, z, BCBlock.alloyFurnaceActive);
 		} else {
-			world.setBlock(x, y, z, BCBlock.alloyFurnace_Idle);
+			world.setBlock(x, y, z, BCBlock.alloyFurnace);
 		}
 		
+		isBurning1 = false;
 		world.setBlockMetadataWithNotify(x, y, z, direction, 2);
 		
 		if(tileEntity != null) {
@@ -157,41 +173,43 @@ public class BlockAlloyFurnace extends BlockContainer {
 	}
 	
 	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-		TileEntityAlloyFurnace tileEntity = (TileEntityAlloyFurnace) world.getTileEntity(x, y, z);
+		if (!isBurning1) {
+			TileAlloyFurnace tileEntity = (TileAlloyFurnace) world.getTileEntity(x, y, z);
 
-		if (tileEntity != null) {
-			for (int i = 0; i < tileEntity.getSizeInventory(); ++i) {
-				ItemStack itemstack = tileEntity.getStackInSlot(i);
-
-				if (itemstack != null) {
-					float f = this.random.nextFloat() * 0.6F + 0.1F;
-					float f1 = this.random.nextFloat() * 0.6F + 0.1F;
-					float f2 = this.random.nextFloat() * 0.6F + 0.1F;
-
-					while (itemstack.stackSize > 0) {
-						int j = this.random.nextInt(21) + 10;
-
-						if (j > itemstack.stackSize) {
-							j = itemstack.stackSize;
+			if (tileEntity != null) {
+				for (int i = 0; i < tileEntity.getSizeInventory(); ++i) {
+					ItemStack itemstack = tileEntity.getStackInSlot(i);
+	
+					if (itemstack != null) {
+						float f = this.random.nextFloat() * 0.6F + 0.1F;
+						float f1 = this.random.nextFloat() * 0.6F + 0.1F;
+						float f2 = this.random.nextFloat() * 0.6F + 0.1F;
+	
+						while (itemstack.stackSize > 0) {
+							int j = this.random.nextInt(21) + 10;
+	
+							if (j > itemstack.stackSize) {
+								j = itemstack.stackSize;
+							}
+	
+							itemstack.stackSize -= j;
+							EntityItem entityitem = new EntityItem(world, (double) ((float) x + f), (double) ((float) y + f1), (double) ((float) z + f2), new ItemStack(itemstack.getItem(), j, itemstack.getItemDamage()));
+	
+							if (itemstack.hasTagCompound()) {
+								entityitem.getEntityItem().setTagCompound(((NBTTagCompound) itemstack.getTagCompound().copy()));
+							}
+	
+							float f3 = 0.025F;
+							entityitem.motionX = (double) ((float) this.random.nextGaussian() * f3);
+							entityitem.motionY = (double) ((float) this.random.nextGaussian() * f3 + 0.1F);
+							entityitem.motionZ = (double) ((float) this.random.nextGaussian() * f3);
+							world.spawnEntityInWorld(entityitem);
 						}
-
-						itemstack.stackSize -= j;
-						EntityItem entityitem = new EntityItem(world, (double) ((float) x + f), (double) ((float) y + f1), (double) ((float) z + f2), new ItemStack(itemstack.getItem(), j, itemstack.getItemDamage()));
-
-						if (itemstack.hasTagCompound()) {
-							entityitem.getEntityItem().setTagCompound(((NBTTagCompound) itemstack.getTagCompound().copy()));
-						}
-
-						float f3 = 0.025F;
-						entityitem.motionX = (double) ((float) this.random.nextGaussian() * f3);
-						entityitem.motionY = (double) ((float) this.random.nextGaussian() * f3 + 0.1F);
-						entityitem.motionZ = (double) ((float) this.random.nextGaussian() * f3);
-						world.spawnEntityInWorld(entityitem);
 					}
 				}
+				world.func_147453_f(x, y, z, block);
 			}
-			world.func_147453_f(x, y, z, block);
-		}
 		super.breakBlock(world, x, y, z, block, meta);
+		}
 	}
 }

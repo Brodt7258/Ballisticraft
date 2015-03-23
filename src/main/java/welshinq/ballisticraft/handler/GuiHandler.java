@@ -5,7 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import welshinq.ballisticraft.alloyfurnace.ContainerAlloyFurnace;
 import welshinq.ballisticraft.alloyfurnace.GuiAlloyFurnace;
-import welshinq.ballisticraft.alloyfurnace.TileEntityAlloyFurnace;
+import welshinq.ballisticraft.alloyfurnace.TileAlloyFurnace;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class GuiHandler implements IGuiHandler {
@@ -18,8 +18,8 @@ public class GuiHandler implements IGuiHandler {
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tileEntity = world.getTileEntity(x, y, z);
-        if(tileEntity instanceof TileEntityAlloyFurnace){
-        	return new ContainerAlloyFurnace(player.inventory, (TileEntityAlloyFurnace) tileEntity);
+        if(tileEntity instanceof TileAlloyFurnace){
+        	return new ContainerAlloyFurnace(player.inventory, (TileAlloyFurnace) tileEntity);
         }
         return null;
 	}
@@ -27,8 +27,8 @@ public class GuiHandler implements IGuiHandler {
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tileEntity = world.getTileEntity(x, y, z);
-        if(tileEntity instanceof TileEntityAlloyFurnace){
-        	return new GuiAlloyFurnace(player.inventory, (TileEntityAlloyFurnace) tileEntity);
+        if(tileEntity instanceof TileAlloyFurnace){
+        	return new GuiAlloyFurnace(player.inventory, (TileAlloyFurnace) tileEntity);
         }
         return null;
 	}

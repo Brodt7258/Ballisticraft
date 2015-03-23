@@ -10,36 +10,29 @@ import net.minecraft.item.ItemStack;
 import welshinq.ballisticraft.BCItem;
 
 public class AlloyFurnaceRecipes {
-	private static final AlloyFurnaceRecipes ALLOYBASE = new AlloyFurnaceRecipes();
 	private Map smeltingList = new HashMap();
 	private Map experienceList = new HashMap();
-	
-	public static AlloyFurnaceRecipes smelting() {
-		return ALLOYBASE;
-	}
-	
-	private AlloyFurnaceRecipes() {
-		
-	}
 	
 	/** Checks a hard-coded recipe to alloyfurnace. 
 	 * Parameters: ItemStack input 1, 2, and 3
 	 */
 	public static ItemStack isRecipe(ItemStack input, ItemStack input1, ItemStack input2) {
-		Item in1 = null;
-		Item in2 = null;
-		Item in3 = null; 
-		if (input != null) in1 = input.getItem();
-		if (input1 != null) in2 = input1.getItem();
-		if (input2 != null) in3 = input2.getItem();
-		Item[] in = new Item[] {in1, in2, in3};
+		Item in = null, in1 = null, in2 = null;
 		ItemStack output = null;
+		if (input != null) in = input.getItem();
+		if (input1 != null) in1 = input1.getItem();
+		if (input2 != null) in2 = input2.getItem();
 		
-		Item[] brassRecipe = new Item[] {BCItem.ingotCopper, BCItem.ingotTin, null};
+		Item[] brassRecipe = new Item[] {BCItem.ingotCopper, BCItem.ingotTin, null, BCItem.ingotBrass};
 		
-		if (in[0] == brassRecipe[0] && in[1] == brassRecipe[1] && in[2] == brassRecipe[2]) {
-			output = new ItemStack(BCItem.ingotBrass, 2, 32767);
+		if (in == brassRecipe[0] || in == brassRecipe[1] || in == brassRecipe[2]) {
+			if (in1 == brassRecipe[0] || in1 == brassRecipe[1] || in1 == brassRecipe[2]) {
+				if (in2 == brassRecipe[0] || in2 == brassRecipe[1] || in2 == brassRecipe[2]) {
+					output = new ItemStack(brassRecipe[3], 2, 32767);
+				}
+			}
 		}
+		
 		
 		return output;
 	}

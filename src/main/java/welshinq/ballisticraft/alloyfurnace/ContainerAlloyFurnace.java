@@ -13,12 +13,12 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerAlloyFurnace extends Container {
-	protected TileEntityAlloyFurnace tileFurnace;
+	protected TileAlloyFurnace tileFurnace;
     private int lastCookTime;
     private int lastBurnTime;
     private int lastItemBurnTime;
 	
-    public ContainerAlloyFurnace(InventoryPlayer invPlayer, TileEntityAlloyFurnace alloyFurnace) {
+    public ContainerAlloyFurnace(InventoryPlayer invPlayer, TileAlloyFurnace alloyFurnace) {
         this.tileFurnace = alloyFurnace;
         
         addGuiSlots(alloyFurnace, invPlayer);
@@ -26,7 +26,7 @@ public class ContainerAlloyFurnace extends Container {
         bindPlayerInventory(invPlayer);
     }
     
-    protected void addGuiSlots(TileEntityAlloyFurnace alloyFurnace, InventoryPlayer invPlayer) {
+    protected void addGuiSlots(TileAlloyFurnace alloyFurnace, InventoryPlayer invPlayer) {
     	/** Input */
     	for (int i = 0; i < 3; i++) {
     		addSlotToContainer(new Slot(alloyFurnace, i, 38 + i * 18, 17));
@@ -142,7 +142,7 @@ public class ContainerAlloyFurnace extends Container {
             }
             else if (slot != 0 && slot != 1 && slot != 2 && slot != 5)
             {
-                if (TileEntityAlloyFurnace.isItemFuel(itemstack1))
+                if (TileAlloyFurnace.isItemFuel(itemstack1))
                 {
                     if (!this.mergeItemStack(itemstack1, 5, 6, false))
                     {
